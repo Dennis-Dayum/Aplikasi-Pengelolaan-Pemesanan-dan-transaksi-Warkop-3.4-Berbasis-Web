@@ -136,7 +136,7 @@ untuk pelanggan. Yang tersedia hanyalah:
 
 ---
 
-## 8. Keamanan yang Diterapkan
+## 7. Keamanan yang Diterapkan
 
 - Password disimpan dengan `password_hash()` (bcrypt) — NFR-05
 - Role-Based Access Control di setiap halaman Admin/Kasir — NFR-06
