@@ -1,4 +1,4 @@
-# Warkop 3.4 — Aplikasi Pengelolaan Pemesanan & Transaksi Berbasis Web
+Warkop 3.4 — Aplikasi Pengelolaan Pemesanan & Transaksi Berbasis Web
 
 Dibangun sesuai SRS (PERANCANGAN APLIKASI PENGELOLAAN PEMESANAN DAN
 TRANSAKSI PADA "WARKOP 3.4" BERBASIS WEB).
@@ -146,3 +146,5 @@ untuk pelanggan. Yang tersedia hanyalah:
 - Validasi & pembatasan ukuran/format file upload foto menu (maks 2MB)
 - Transaksi lunas tidak bisa diedit, hanya bisa di-void oleh admin dengan
   alasan wajib dicatat — NFR-04, NFR-19
+# Aplikasi-Pengelolaan-Pemesanan-dan-transaksi-Warkop-3.4-Berbasis-Web
+Pada project kali ini kelompok kami membuat Aplikasi untuk mengelola transaksi pada UMKM Warkop 
