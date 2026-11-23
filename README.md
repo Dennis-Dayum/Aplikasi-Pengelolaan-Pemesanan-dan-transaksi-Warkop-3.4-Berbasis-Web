@@ -1,150 +1,145 @@
-Warkop 3.4 — Aplikasi Pengelolaan Pemesanan & Transaksi Berbasis Web
+# Warkop 3.4 — Aplikasi Pengelolaan Pemesanan dan Transaksi Berbasis Web
 
-Dibangun sesuai SRS (PERANCANGAN APLIKASI PENGELOLAAN PEMESANAN DAN
-TRANSAKSI PADA "WARKOP 3.4" BERBASIS WEB).
+Warkop 3.4 merupakan aplikasi berbasis web yang dikembangkan untuk membantu proses pengelolaan pemesanan, transaksi, menu, stok, dan laporan penjualan pada UMKM Warkop.
 
-- Backend: PHP native (tanpa framework, arsitektur mendekati MVC sesuai constraint SRS 2.5)
-- Frontend: HTML, CSS (custom, tanpa framework CSS)
-- Database: MySQL (XAMPP)
-- Tidak ada fitur cetak nota/struk transaksi hanya Laporan Penjualan.
+Project ini dibangun berdasarkan dokumen SRS (Software Requirements Specification) dengan judul **"Perancangan Aplikasi Pengelolaan Pemesanan dan Transaksi pada Warkop 3.4 Berbasis Web".**
 
----
+## 1. Teknologi yang Digunakan
 
-# 1. Kebutuhan Sistem
+- **Backend:** PHP Native (tanpa framework).
+- **Frontend:** HTML dan CSS Custom.
+- **Database:** MySQL.
+- **Web Server:** Apache (XAMPP).
+- **Browser:** Google Chrome, Mozilla Firefox, atau Microsoft Edge.
 
-- XAMPP (Apache + MySQL + PHP 8.x) — [https://www.apachefriends.org](https://www.apachefriends.org)
-- Browser modern (Chrome/Firefox/Edge)
+## 2. Fitur Aplikasi
 
----
+### Admin / Owner
+- Dashboard pengelolaan aplikasi.
+- Manajemen kategori menu.
+- Manajemen menu makanan dan minuman.
+- Manajemen stok bahan baku.
+- Manajemen pengguna.
+- Monitoring seluruh pesanan.
+- Pengelolaan pembatalan transaksi.
+- Laporan penjualan.
+- Export laporan ke Excel.
+- Cetak atau simpan laporan dalam format PDF.
 
-# 2. Akun Login Default (Admin/Owner & Kasir)
+### Kasir
+- Dashboard pesanan masuk.
+- Melihat detail pesanan pelanggan.
+- Mengelola ketersediaan menu.
+- Memproses pembayaran tunai dan non-tunai.
+- Mengelola status pesanan.
+- Melihat riwayat transaksi.
+- Melihat laporan penjualan harian.
 
-Akun berikut **sudah langsung aktif** begitu `database/warkop34.sql`
-diimport di phpMyAdmin — tidak perlu langkah tambahan apa pun.
+### Pelanggan
+- Melihat daftar menu berdasarkan kategori.
+- Menambahkan menu ke keranjang.
+- Mengubah dan mengelola keranjang.
+- Melakukan pemesanan secara online.
+- Memasukkan nomor meja.
+- Melihat status pesanan.
 
-| Role          | Username | Password   |
-|---------------|----------|------------|
-| Admin / Owner | `admin`  | `admin123` |
-| Kasir         | `kasir1` | `kasir123` |
+## 3. Laporan Penjualan
 
-> Penting: ganti kedua password ini setelah login pertama
-> kali melalui menu Admin → Manajemen Pengguna → Reset Password, terutama
-> jika aplikasi akan dipakai di luar lingkungan demo/skripsi.
+Aplikasi menyediakan fitur laporan penjualan untuk membantu Admin/Owner memantau aktivitas transaksi.
 
-Ingin menambah kasir lain? Login sebagai admin → menu Manajemen Pengguna
-→ isi form "Tambah Akun".
+Fitur laporan meliputi:
 
-## Jika akun default hilang/terhapus
-Buka `http://localhost/warkop34/install/buat_akun_awal.php` satu kali di
-browser — skrip ini akan membuat ulang akun `admin` dan `kasir1` di atas
-secara otomatis (password di-hash langsung oleh PHP di server Anda). Setelah
-dipakai, sebaiknya folder `install/` dihapus dari server produksi.
+1. Filter laporan berdasarkan rentang tanggal.
+2. Filter berdasarkan kasir.
+3. Filter berdasarkan metode pembayaran.
+4. Filter berdasarkan status transaksi.
+5. Ringkasan total penjualan.
+6. Rekap menu yang terjual.
+7. Rekap metode pembayaran.
+8. Rincian transaksi.
+9. Export laporan ke Excel.
+10. Cetak atau simpan laporan ke PDF melalui browser.
 
----
+**Catatan:** Aplikasi ini tidak menyediakan fitur cetak nota atau struk transaksi pelanggan. Fitur yang tersedia adalah laporan penjualan.
 
-## 3. Struktur Folder
+## 4. Struktur Folder Project
 
-```
+```text
 warkop34/
-├── admin/              -> Semua halaman Admin/Owner
-│   ├── dashboard.php
-│   ├── kategori.php            (Manajemen Kategori Menu)
-│   ├── menu.php, menu_form.php, menu_hapus.php   (FR-4, FR-5, FR-6)
-│   ├── stok.php                (Manajemen Stok Bahan Baku)
-│   ├── pengguna.php            (Manajemen akun Admin/Kasir)
-│   ├── pesanan.php             (Monitor semua pesanan)
-│   ├── void_transaksi.php      (NFR-04, NFR-19 - pembatalan transaksi wajib alasan)
-│   ├── laporan.php             (★ Laporan Penjualan - filter & ringkasan)
-│   ├── laporan_export_excel.php (★ Export Excel/.xls)
-│   └── laporan_cetak.php       (★ Cetak / Simpan sebagai PDF)
-├── kasir/               -> Semua halaman Kasir
-│   ├── dashboard.php           (FR-11 - daftar pesanan masuk)
-│   ├── detail_pesanan.php      (FR-13 - proses pembayaran tunai/non-tunai)
-│   ├── stok_menu.php           (FR-12 - toggle status tersedia/habis)
-│   ├── riwayat_transaksi.php   (FR-14 - riwayat transaksi milik kasir)
-│   └── laporan_harian.php      (Ringkasan laporan harian untuk kasir)
-├── pelanggan/            -> Halaman Pelanggan (self-order, tanpa login)
-│   ├── index.php               (FR-7 - lihat menu per kategori)
-│   ├── tambah_keranjang.php / keranjang.php / update_keranjang.php  (FR-8)
-│   ├── checkout.php            (FR-9 - submit pesanan + nomor meja)
-│   └── status_pesanan.php      (FR-10 - tracking status pesanan)
-├── auth/                 -> login.php, logout.php (FR-1, FR-2, FR-3)
-├── install/               -> Skrip cadangan pembuat akun awal
-├── includes/               -> auth.php (RBAC & session timeout), functions.php, layout, dll.
-├── config/database.php      -> Konfigurasi koneksi MySQL
-├── assets/css/style.css, assets/js/script.js
-├── uploads/menu/            -> Lokasi penyimpanan foto menu (maks 2MB)
-├── database/warkop34.sql    -> Skema database + data awal + akun login
-└── index.php                 -> Router awal (redirect sesuai status login)
+├── admin/             # Halaman Admin / Owner
+├── kasir/             # Halaman Kasir
+├── pelanggan/         # Halaman Pemesanan Pelanggan
+├── auth/              # Autentikasi Pengguna
+├── includes/          # File pendukung aplikasi
+├── config/            # Konfigurasi aplikasi
+├── assets/
+│   ├── css/           # File CSS
+│   └── js/            # File JavaScript
+├── uploads/
+│   └── menu/          # Foto menu
+├── database/          # Database aplikasi
+└── index.php          # Halaman utama aplikasi
 ```
 
+## 5. Persyaratan Sistem
+
+Sebelum menjalankan aplikasi, pastikan perangkat sudah memiliki:
+
+- XAMPP dengan PHP 8.x.
+- MySQL.
+- Browser modern.
+- Text editor atau IDE (Visual Studio Code direkomendasikan).
+
+## 6. Cara Instalasi
+
+1. Download atau clone repository project.
+2. Pindahkan folder project ke direktori `htdocs` XAMPP.
+3. Jalankan Apache dan MySQL melalui XAMPP Control Panel.
+4. Buka phpMyAdmin melalui browser.
+5. Buat database sesuai konfigurasi aplikasi.
+6. Import file database yang tersedia pada folder `database`.
+7. Sesuaikan konfigurasi koneksi database.
+8. Buka aplikasi melalui browser:
+
+```text
+http://localhost/warkop34/
+```
+
+9. Lakukan proses login menggunakan akun yang telah disiapkan oleh administrator.
+
+## 7. Keamanan Aplikasi
+
+Aplikasi memperhatikan beberapa aspek keamanan, antara lain:
+
+- Autentikasi pengguna.
+- Pembagian hak akses berdasarkan role.
+- Pengelolaan sesi pengguna.
+- Password menggunakan mekanisme hashing.
+- Pencegahan SQL Injection melalui prepared statements.
+- Perlindungan form menggunakan CSRF token.
+- Validasi file upload.
+- Pembatasan akses berdasarkan hak pengguna.
+- Pengelolaan pembatalan transaksi dengan pencatatan alasan.
+
+## 8. Tujuan Pengembangan
+
+Aplikasi Warkop 3.4 dikembangkan untuk:
+
+- Mempermudah proses pemesanan pelanggan.
+- Membantu kasir mengelola transaksi.
+- Mempermudah Admin/Owner mengelola menu dan stok.
+- Meningkatkan efisiensi operasional warkop.
+- Mempermudah pemantauan laporan penjualan.
+- Mengurangi kesalahan dalam pencatatan transaksi.
+
+## 9. Pengembang
+
+Project ini dikembangkan secara berkelompok sebagai bagian dari kegiatan perancangan dan pengembangan aplikasi berbasis web.
+
+**Nama Project:** Warkop 3.4
+
+**Jenis Aplikasi:** Aplikasi Pengelolaan Pemesanan dan Transaksi Berbasis Web.
+
 ---
 
-## 4. Fitur & Pemetaan ke SRS
-
-| Fitur                              | Requirement SRS         | Lokasi File                                  |
-|-------------------------------------|--------------------------|-----------------------------------------------|
-| Login & RBAC (Admin/Kasir)          | FR-1, FR-2, FR-3, NFR-06 | `auth/login.php`, `includes/auth.php`         |
-| Auto logout 30 menit tidak aktif    | NFR-07                   | `includes/auth.php`                           |
-| Manajemen Menu                      | FR-4, FR-5, FR-6         | `admin/menu*.php`                             |
-| Manajemen Stok Bahan Baku           | Fitur 4.5                | `admin/stok.php`                              |
-| Pemesanan Pelanggan                 | FR-7, FR-8, FR-9         | `pelanggan/*.php`                             |
-| Status Pesanan                      | FR-10                    | `pelanggan/status_pesanan.php`                |
-| Pesanan Masuk & Ketersediaan Menu   | FR-11, FR-12             | `kasir/dashboard.php`, `kasir/stok_menu.php`  |
-| Pembayaran Tunai/Non-tunai          | FR-13                    | `kasir/detail_pesanan.php`                    |
-| Riwayat Transaksi                   | FR-14                    | `kasir/riwayat_transaksi.php`                 |
-| Laporan Penjualan (bukan nota)      | Fitur 4.6, Bab 6         | `admin/laporan.php` + export Excel/PDF        |
-| Transaksi tidak dapat dihapus, hanya di-void dengan alasan | NFR-04, NFR-19 | `admin/void_transaksi.php`      |
-| Upload foto menu maks 2MB           | Bab 2.5, Bab 6           | `includes/functions.php` (`uploadFotoMenu`)   |
-| Password ter-hash (bcrypt)          | NFR-05                   | `password_hash()` / `password_verify()`       |
-
----
-
-## 5. Catatan Laporan Penjualan (Bukan Nota)
-aplikasi ini tidak menyediakan cetak nota/struk transaksi
-untuk pelanggan. Yang tersedia hanyalah:
-
-1. Laporan Penjualan (Admin) — `admin/laporan.php`: filter berdasarkan
-   rentang tanggal, kasir, metode pembayaran, dan status transaksi; menampilkan
-   ringkasan total penjualan, rekap menu terjual, rekap per metode pembayaran,
-   dan rincian transaksi.
-2. Export Excel — tombol "Export Excel" menghasilkan file `.xls` yang bisa
-   dibuka langsung di Microsoft Excel / LibreOffice / Google Sheets, tanpa
-   perlu instalasi library tambahan.
-3. Cetak / Simpan PDF — tombol "Cetak / Simpan PDF" membuka halaman laporan
-   versi cetak; gunakan dialog **Print → Save as PDF** pada browser untuk
-   mendapatkan file PDF laporan (pendekatan ini dipilih agar aplikasi bisa
-   langsung berjalan di XAMPP tanpa instalasi library PDF via Composer).
-   Jika ke depannya Anda ingin PDF asli dari server (misalnya dengan
-   TCPDF/FPDF/Dompdf), tinggal install library tersebut via Composer dan
-   ganti isi `admin/laporan_cetak.php`.
-4. Laporan Harian (Kasir) — `kasir/laporan_harian.php`: ringkasan
-   sederhana untuk kasir memantau penjualan hari berjalan.
-
----
-
-## 6. Alur Penggunaan Singkat
-
-1. Pelanggan membuka `pelanggan/index.php` → pilih menu → checkout dengan
-   nomor meja → mendapat kode pesanan → bisa cek status kapan saja.
-2. Kasir login → melihat pesanan masuk di dashboard → buka detail →
-   proses pembayaran (tunai/non-tunai) → update status disajikan/selesai.
-3. Admin/Owner login → kelola menu, kategori, stok bahan baku, pengguna →
-   memantau semua pesanan/transaksi → membuka Laporan Penjualan untuk
-   melihat performa dan mengekspornya ke Excel/PDF → jika ada kesalahan input
-   transaksi, gunakan fitur Void dengan alasan wajib diisi.
-
----
-
-## 7. Keamanan yang Diterapkan
-
-- Password disimpan dengan `password_hash()` (bcrypt) — NFR-05
-- Role-Based Access Control di setiap halaman Admin/Kasir — NFR-06
-- Auto logout setelah 30 menit tidak aktif — NFR-07
-- CSRF token di setiap form POST
-- Prepared statements (PDO) di seluruh query — mencegah SQL Injection
-- Validasi & pembatasan ukuran/format file upload foto menu (maks 2MB)
-- Transaksi lunas tidak bisa diedit, hanya bisa di-void oleh admin dengan
-  alasan wajib dicatat — NFR-04, NFR-19
-# Aplikasi-Pengelolaan-Pemesanan-dan-transaksi-Warkop-3.4-Berbasis-Web
-Pada project kali ini kelompok kami membuat Aplikasi untuk mengelola transaksi pada UMKM Warkop 
+© 2026 Warkop 3.4 — Project Pengembangan Aplikasi Berbasis Web.
