@@ -131,7 +131,7 @@ Aplikasi Warkop 3.4 dikembangkan untuk:
 - Meningkatkan efisiensi operasional warkop.
 - Mempermudah pemantauan laporan penjualan.
 - Mengurangi kesalahan dalam pencatatan transaksi.
-- 
+  
 ## 9. Pengembang
 
 Project ini dikembangkan secara berkelompok sebagai bagian dari kegiatan perancangan dan pengembangan aplikasi berbasis web.
